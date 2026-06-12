@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riri et Loulou</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.65)),
+        repeating-linear-gradient(
+          0deg,
+          #f4efe6,
+          #f4efe6 28px,
+          #e8dfd1 29px
+        );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #1f2933;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(92vw, 500px);
+      background: #fffaf0;
+      border: 2px solid #1f2933;
+      border-radius: 18px;
+      padding: 28px;
+      text-align: left;
+      box-shadow: 10px 10px 0 #1f2933;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #d8f3dc;
+      border: 2px solid #1f2933;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+
+    .small {
+      font-size: 1rem;
+      opacity: 0.68;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      margin: 0 0 22px;
+      line-height: 1.5;
+      color: #374151;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 26px;
+    }
+
+    .list label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: #f7f0df;
+      border: 1.5px solid #1f2933;
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    .list label:hover {
+      transform: translateX(4px);
+      background: #e7f5ff;
+    }
+
+    .list input {
+      width: 16px;
+      height: 16px;
+      accent-color: #2f9e44;
+      flex-shrink: 0;
+    }
+
+    .muted {
+      opacity: 0.65;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      position: relative;
+      height: 58px;
+      margin-top: 6px;
+    }
+
+    button {
+      border: 2px solid #1f2933;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 #1f2933;
+    }
+
+    #yes {
+      background: #a5d8ff;
+      color: #111827;
+    }
+
+    #no {
+      background: #f1f3f5;
+      color: #374151;
+      position: absolute;
+      left: 66%;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .success {
+      margin-top: 18px;
+      background: #d8f3dc;
+      border: 2px solid #1f2933;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .piece {
+      position: absolute;
+      font-size: 18px;
+      animation: fall 2.5s linear forwards;
+    }
+
+    @keyframes fall {
+      from {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(110vh) rotate(260deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .card {
+        padding: 22px;
+        box-shadow: 7px 7px 0 #1f2933;
+      }
+
+      h1 {
+        font-size: 1.45rem;
+      }
+
+      .buttons {
+        flex-direction: column;
+        align-items: center;
+        height: 116px;
+      }
+
+      #no {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="confetti" id="confetti"></div>
+
+  <main class="card">
+    <div class="badge">mission optionnelle mais fortement recommandée</div>
+
+    <h1>Riri <span class="small">(phiphi)</span> et Loulou</h1>
+
+    <p class="subtitle">
+      Rita, would you like to go through the list with me?
+    </p>
+
+    <div class="list">
+      <label><input type="checkbox" /> Aller à Emmaüs</label>
+      <label><input type="checkbox" /> Forêt / campagne</label>
+      <label><input type="checkbox" /> Mariage arrangé <span class="muted">(???)</span></label>
+      <label><input type="checkbox" /> Regarder les étoiles <span class="muted">(!!!)</span></label>
+      <label><input type="checkbox" /> Apprendre le skate</label>
+      <label><input type="checkbox" /> Apprendre la guitare</label>
+      <label><input type="checkbox" /> Buttes-Chaumont à Paris <span class="muted">(oups)</span></label>
+      <label><input type="checkbox" /> Se casser loin</label>
+      <label><input type="checkbox" /> Italie <span class="muted">(tu sais, le reel)</span></label>
+      <label><input type="checkbox" /> Partager 5 Red Bulls</label>
+    </div>
+
+    <div class="buttons">
+      <button id="yes">Oui, on lance la quête</button>
+      <button id="no">Non</button>
+    </div>
+
+    <div id="success" class="success hidden">
+      Très bon choix. La liste est maintenant officiellement en cours d’exécution.
+    </div>
+  </main>
+
+  <script>
+    const yes = document.getElementById("yes");
+    const no = document.getElementById("no");
+    const success = document.getElementById("success");
+    const confetti = document.getElementById("confetti");
+
+    const noTexts = [
+      "Non",
+      "Vraiment ?",
+      "Réfléchis",
+      "Mauvais bouton",
+      "Erreur 404",
+      "Presque"
+    ];
+
+    let noIndex = 0;
+
+    no.addEventListener("mouseenter", () => {
+      noIndex = (noIndex + 1) % noTexts.length;
+      no.textContent = noTexts[noIndex];
+
+      if (window.innerWidth <= 430) {
+        return;
+      }
+
+      const x = Math.random() * (window.innerWidth - 130);
+      const y = Math.random() * (window.innerHeight - 70);
+
+      no.style.position = "fixed";
+      no.style.left = `${x}px`;
+      no.style.top = `${y}px`;
+    });
+
+    no.addEventListener("click", () => {
+      no.textContent = "hmm";
+    });
+
+    yes.addEventListener("click", () => {
+      success.classList.remove("hidden");
+      yes.textContent = "Quête acceptée";
+      no.style.display = "none";
+
+      for (let i = 0; i < 28; i++) {
+        createPiece();
+      }
+    });
+
+    function createPiece() {
+      const piece = document.createElement("div");
+      const symbols = ["*", "+", "•", "✦", "·"];
+
+      piece.className = "piece";
+      piece.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      piece.style.left = Math.random() * 100 + "vw";
+      piece.style.top = "-5vh";
+      piece.style.animationDelay = Math.random() * 0.7 + "s";
+
+      confetti.appendChild(piece);
+
+      setTimeout(() => {
+        piece.remove();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
