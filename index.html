@@ -195,6 +195,50 @@
       text-align: center;
     }
 
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(31, 41, 51, 0.42);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      z-index: 10000;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-box {
+      width: min(90vw, 420px);
+      background: #fffaf2;
+      border: 2px solid #1f2933;
+      border-radius: 22px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 8px 8px 0 #1f2933, 0 20px 55px rgba(31, 41, 51, 0.24);
+      animation: popup-in 0.22s ease;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .modal-box p {
+      margin: 0 0 18px;
+      line-height: 1.45;
+      color: #374151;
+    }
+
+    #modal-close {
+      background: #cfe8ff;
+      color: #111827;
+    }
+
     .confetti {
       position: fixed;
       inset: 0;
@@ -249,9 +293,11 @@
         transform: translateY(-12vh) translateX(0) rotate(0deg) scale(0.95);
         opacity: 0;
       }
+
       10% {
         opacity: 1;
       }
+
       100% {
         transform: translateY(112vh) translateX(36px) rotate(310deg) scale(1.25);
         opacity: 0;
@@ -273,6 +319,18 @@
 
       75% {
         transform: translate(1px, 2px);
+      }
+    }
+
+    @keyframes popup-in {
+      from {
+        transform: scale(0.86) translateY(8px);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
       }
     }
 
@@ -337,6 +395,15 @@
     </div>
   </main>
 
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-title">Incomplete sidequest protocol.</div>
+      <p>
+          So you want to skip some stuff...  okay ..    </p>
+      <button id="modal-close">my bad</button>
+    </div>
+  </div>
+
   <script>
     const yes = document.getElementById("yes");
     const no = document.getElementById("no");
@@ -348,6 +415,8 @@
     const card = document.querySelector(".card");
     const checkboxes = [...document.querySelectorAll(".list input")];
     const starsOption = document.querySelector('[data-effect="stars"] input');
+    const modal = document.getElementById("modal");
+    const modalClose = document.getElementById("modal-close");
 
     const noTexts = [
       "No",
@@ -497,6 +566,19 @@
     });
 
     yes.addEventListener("click", () => {
+      const allChecked = checkboxes.every((item) => item.checked);
+
+      if (!allChecked) {
+        modal.classList.remove("hidden");
+        shakeCard();
+
+        for (let i = 0; i < 22; i++) {
+          createSoftPiece();
+        }
+
+        return;
+      }
+
       success.classList.remove("hidden");
       secret.classList.remove("hidden");
       yes.textContent = "Sidequests unlocked";
@@ -504,6 +586,16 @@
 
       for (let i = 0; i < 44; i++) {
         createSoftPiece();
+      }
+    });
+
+    modalClose.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.classList.add("hidden");
       }
     });
 
