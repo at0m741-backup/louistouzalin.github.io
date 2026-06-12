@@ -397,10 +397,10 @@
 
   <div id="modal" class="modal hidden">
     <div class="modal-box">
-      <div class="modal-title">Incomplete sidequest protocol.</div>
+      <div class="modal-title">mmmhhhhh</div>
       <p>
-          So you want to skip some stuff...  okay ..    </p>
-      <button id="modal-close">my bad</button>
+        So you want to skip it... okay Rita    </p>
+      <button id="modal-close">oopsi</button>
     </div>
   </div>
 
@@ -444,7 +444,6 @@
     ];
 
     let noIndex = 0;
-    let lastNoDodge = 0;
     let badgeIndex = 0;
     const defaultHint = hint.textContent;
 
@@ -487,28 +486,20 @@
       no.style.position = "fixed";
       no.style.left = `${bestSpot.x}px`;
       no.style.top = `${bestSpot.y}px`;
+    }
 
-      lastNoDodge = Date.now();
+    function handleNoEscape(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      dodgeNoButton(event);
     }
 
     no.addEventListener("pointerenter", dodgeNoButton);
-
-    no.addEventListener("pointerdown", (event) => {
-      if (event.pointerType === "mouse") {
-        return;
-      }
-
-      event.preventDefault();
-      dodgeNoButton(event);
-    });
+    no.addEventListener("pointerdown", handleNoEscape);
 
     no.addEventListener("click", (event) => {
-      if (Date.now() - lastNoDodge < 500) {
-        event.preventDefault();
-        return;
-      }
-
-      no.textContent = "hmm";
+      event.preventDefault();
+      event.stopPropagation();
     });
 
     badge.addEventListener("click", () => {
