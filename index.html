@@ -45,20 +45,6 @@
       z-index: 2;
     }
 
-    .badge {
-      display: inline-block;
-      background: #d8f3dc;
-      border: 2px solid #1f2933;
-      border-radius: 999px;
-      padding: 7px 13px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 18px;
-      cursor: pointer;
-      user-select: none;
-      box-shadow: 3px 3px 0 #1f2933;
-    }
-
     h1 {
       font-size: 1.75rem;
       margin: 0 0 22px;
@@ -143,6 +129,8 @@
     #yes {
       background: #cfe8ff;
       color: #111827;
+      position: relative;
+      z-index: 5;
     }
 
     #yes:hover {
@@ -152,6 +140,8 @@
     #no {
       background: #f8f9fa;
       color: #374151;
+      position: relative;
+      z-index: 4;
     }
 
     #no.is-growing {
@@ -168,31 +158,6 @@
 
     .hidden {
       display: none;
-    }
-
-    .success {
-      margin-top: 18px;
-      background: #d8f3dc;
-      border: 2px solid #1f2933;
-      border-radius: 16px;
-      padding: 13px;
-      font-size: 0.98rem;
-      font-weight: 700;
-      line-height: 1.45;
-      text-align: center;
-      box-shadow: 4px 4px 0 #1f2933;
-    }
-
-    .secret-note {
-      margin-top: 12px;
-      background: #fff3bf;
-      border: 2px dashed #1f2933;
-      border-radius: 16px;
-      padding: 12px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      line-height: 1.45;
-      text-align: center;
     }
 
     .modal {
@@ -212,7 +177,7 @@
     }
 
     .modal-box {
-      width: min(90vw, 420px);
+      width: min(90vw, 440px);
       background: #fffaf2;
       border: 2px solid #1f2933;
       border-radius: 22px;
@@ -229,9 +194,13 @@
     }
 
     .modal-box p {
-      margin: 0 0 18px;
+      margin: 0 0 12px;
       line-height: 1.45;
       color: #374151;
+    }
+
+    .modal-box p:last-of-type {
+      margin-bottom: 18px;
     }
 
     #modal-close {
@@ -382,38 +351,27 @@
     </div>
 
     <p class="hint">The No button exists for contractual reasons but try it if u want gurl.</p>
-
-    <div id="success" class="success hidden">
-      Congratulations. You have unlocked this sidequests.
-      Main quest can wait.
-    </div>
-
-    <div id="secret" class="secret-note hidden">
-      Objective updated: choose a date before the Red Bull budget becomes unreasonable.
-    </div>
   </main>
 
   <div id="modal" class="modal hidden">
     <div class="modal-box">
-      <div class="modal-title">mmmhhhhh</div>
-      <p>
-        So you want to skip it... ok Rita</p>
-      <button id="modal-close">oopsi my bad</button>
+      <div id="modal-title" class="modal-title"></div>
+      <div id="modal-content"></div>
+      <button id="modal-close">Understood</button>
     </div>
   </div>
 
   <script>
     const yes = document.getElementById("yes");
     const no = document.getElementById("no");
-    const success = document.getElementById("success");
     const confetti = document.getElementById("confetti");
-    const badge = document.getElementById("badge");
     const hint = document.querySelector(".hint");
-    const secret = document.getElementById("secret");
     const card = document.querySelector(".card");
     const checkboxes = [...document.querySelectorAll(".list input")];
     const starsOption = document.querySelector('[data-effect="stars"] input');
     const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalContent = document.getElementById("modal-content");
     const modalClose = document.getElementById("modal-close");
 
     const noTexts = [
@@ -434,16 +392,15 @@
       "Come back here"
     ];
 
-    const badgeTexts = [
-      "optional mission, strongly recommended",
-      "riri/loulou.txt",
-      "sidequests.json",
-      "status: suspiciously wholesome"
-    ];
-
     let noIndex = 0;
-    let badgeIndex = 0;
     const defaultHint = hint.textContent;
+
+    function showModal(title, html, buttonText = "Understood") {
+      modalTitle.textContent = title;
+      modalContent.innerHTML = html;
+      modalClose.textContent = buttonText;
+      modal.classList.remove("hidden");
+    }
 
     function dodgeNoButton(event) {
       noIndex = (noIndex + 1) % noTexts.length;
@@ -468,7 +425,7 @@
         distance: -1
       };
 
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 10; i++) {
         const x = minX + Math.random() * (maxX - minX);
         const y = minY + Math.random() * (maxY - minY);
 
@@ -484,6 +441,7 @@
       no.style.position = "fixed";
       no.style.left = `${bestSpot.x}px`;
       no.style.top = `${bestSpot.y}px`;
+      no.style.zIndex = "4";
     }
 
     function handleNoEscape(event) {
@@ -498,15 +456,6 @@
     no.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-    });
-
-    badge.addEventListener("click", () => {
-      badgeIndex = (badgeIndex + 1) % badgeTexts.length;
-      badge.textContent = badgeTexts[badgeIndex];
-
-      for (let i = 0; i < 16; i++) {
-        createSoftPiece();
-      }
     });
 
     checkboxes.forEach((checkbox) => {
@@ -558,7 +507,12 @@
       const allChecked = checkboxes.every((item) => item.checked);
 
       if (!allChecked) {
-        modal.classList.remove("hidden");
+        showModal(
+          "mmmhhhhh",
+          "<p>So you want to skip it... ok Rita.</p>",
+          "oopsi my bad"
+        );
+
         shakeCard();
 
         for (let i = 0; i < 22; i++) {
@@ -568,8 +522,16 @@
         return;
       }
 
-      success.classList.remove("hidden");
-      secret.classList.remove("hidden");
+      showModal(
+        "Sidequests unlocked.",
+        `
+          <p>Congratulations. You have unlocked this sidequests.</p>
+          <p>Main quest can wait.</p>
+          <p><strong>Objective updated:</strong> choose a date before the Red Bull budget becomes unreasonable.</p>
+        `,
+        "deal"
+      );
+
       yes.textContent = "Sidequests unlocked";
       no.style.display = "none";
 
