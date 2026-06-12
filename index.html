@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Riri et Loulou</title>
+  <title>Riri and Loulou</title>
 
   <style>
     * {
@@ -49,31 +49,14 @@
       font-size: 0.8rem;
       font-weight: 700;
       margin-bottom: 18px;
+      cursor: pointer;
+      user-select: none;
     }
 
     h1 {
       font-size: 1.75rem;
-      margin: 0 0 10px;
-      line-height: 1.2;
-    }
-
-    .small {
-      font-size: 1rem;
-      opacity: 0.68;
-    }
-
-    .subtitle {
-      font-size: 1rem;
       margin: 0 0 22px;
-      line-height: 1.5;
-      color: #374151;
-    }
-
-    .hint {
-      margin: 0 0 16px;
-      font-size: 0.86rem;
-      color: #6b7280;
-      text-align: center;
+      line-height: 1.2;
     }
 
     .list {
@@ -98,6 +81,17 @@
     .list label:hover {
       transform: translateX(4px);
       background: #e7f5ff;
+    }
+
+    .list label.is-checked {
+      background: #fff3bf;
+    }
+
+    .list label.is-checked::after {
+      content: "✓";
+      margin-left: auto;
+      font-weight: 900;
+      color: #2f9e44;
     }
 
     .list input {
@@ -148,6 +142,18 @@
       color: #374151;
     }
 
+    #no.is-growing {
+      transform: scale(1.35);
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      font-size: 0.86rem;
+      color: #6b7280;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
     .hidden {
       display: none;
     }
@@ -159,6 +165,18 @@
       border-radius: 14px;
       padding: 12px;
       font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .secret-note {
+      margin-top: 12px;
+      background: #fff3bf;
+      border: 2px dashed #1f2933;
+      border-radius: 14px;
+      padding: 11px 12px;
+      font-size: 0.9rem;
       font-weight: 700;
       line-height: 1.45;
       text-align: center;
@@ -182,8 +200,21 @@
       text-shadow: 0 0 8px rgba(245, 159, 0, 0.5);
     }
 
-    #no.is-growing {
-      transform: scale(1.35);
+    .music-piece {
+      color: #4263eb;
+      text-shadow: 0 0 8px rgba(66, 99, 235, 0.35);
+    }
+
+    .italy-green {
+      color: #2b8a3e;
+    }
+
+    .italy-red {
+      color: #c92a2a;
+    }
+
+    .card.is-shaking {
+      animation: tiny-shake 0.38s ease;
     }
 
     @keyframes fall {
@@ -194,6 +225,21 @@
       to {
         transform: translateY(110vh) rotate(260deg);
         opacity: 0;
+      }
+    }
+
+    @keyframes tiny-shake {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(2px, -1px);
+      }
+      50% {
+        transform: translate(-2px, 1px);
+      }
+      75% {
+        transform: translate(1px, 2px);
       }
     }
 
@@ -212,7 +258,6 @@
         align-items: center;
         height: 116px;
       }
-
     }
   </style>
 </head>
@@ -221,32 +266,37 @@
   <div class="confetti" id="confetti"></div>
 
   <main class="card">
-    <div class="badge">mission optionnelle mais fortement recommandée</div>
+    <div class="badge" id="badge">optional mission, strongly recommended</div>
 
-    <h1>Rita, est-ce que tu veux compléter la liste avec moi ?</h1>
+    <h1>Rita, would you like to complete the list with me?</h1>
 
     <div class="list">
       <label><input type="checkbox" /> Aller à Emmaüs</label>
-      <label><input type="checkbox" /> Forêt / campagne</label>
+      <label><input type="checkbox" /> Foret / campagne</label>
       <label><input type="checkbox" /> Mariage arrangé <span class="muted">(???)</span></label>
       <label data-effect="stars"><input type="checkbox" /> Regarder les étoiles <span class="muted">(!!!)</span></label>
       <label><input type="checkbox" /> Apprendre le skate</label>
-      <label><input type="checkbox" /> Apprendre la guitare</label>
-      <label><input type="checkbox" /> Buttes-Chaumont à Paris <span class="muted">(oups)</span></label>
+      <label data-effect="guitar"><input type="checkbox" /> Apprendre la guitare</label>
+      <label><input type="checkbox" /> Buttes Chaumont à Paris <span class="muted">(oups)</span></label>
       <label><input type="checkbox" /> Se casser loin</label>
-      <label><input type="checkbox" /> Italie <span class="muted">(tu sais, le reel)</span></label>
-      <label><input type="checkbox" /> Partager 5 Red Bulls</label>
+      <label data-effect="italy"><input type="checkbox" /> Italie <span class="muted">(tsais le reel)</span></label>
+      <label data-effect="redbull"><input type="checkbox" /> Partager 5 redbulls</label>
     </div>
 
     <div class="buttons">
-      <button id="yes">Oui</button>
-      <button id="no">Non</button>
+      <button id="yes">Yes</button>
+      <button id="no">No</button>
     </div>
 
-    <p class="hint">Essaie Non quand même, juste pour voir.</p>
+    <p class="hint">The No button exists for contractual reasons.</p>
 
     <div id="success" class="success hidden">
-      Parfait. La quête est acceptée : première étape, trouver une date.
+      Congratulations. You have unlocked the Riri & Loulou sidequests.
+      Main quest can wait.
+    </div>
+
+    <div id="secret" class="secret-note hidden">
+      Objective updated: choose a date before the Red Bull budget becomes unreasonable.
     </div>
   </main>
 
@@ -255,28 +305,42 @@
     const no = document.getElementById("no");
     const success = document.getElementById("success");
     const confetti = document.getElementById("confetti");
+    const badge = document.getElementById("badge");
+    const hint = document.querySelector(".hint");
+    const secret = document.getElementById("secret");
+    const card = document.querySelector(".card");
+    const checkboxes = [...document.querySelectorAll(".list input")];
     const starsOption = document.querySelector('[data-effect="stars"] input');
 
     const noTexts = [
-      "Non",
-      "Vraiment ?",
-      "Réfléchis",
-      "Mauvais bouton",
-      "Erreur 404",
-      "Presque",
-      "Raté",
-      "Même pas",
-      "Trop tard",
-      "Pas celui-là",
-      "Tu abuses",
-      "Dernière chance",
-      "Non mais oui",
-      "Courage",
-      "Reviens ici"
+      "No",
+      "Really?",
+      "Think again",
+      "Wrong button",
+      "Error 404",
+      "Almost",
+      "Missed",
+      "Not even close",
+      "Too late",
+      "Not this one",
+      "Come on",
+      "Last chance",
+      "No but yes",
+      "Be brave",
+      "Come back here"
+    ];
+
+    const badgeTexts = [
+      "optional mission, strongly recommended",
+      "riri/loulou.txt",
+      "sidequests.json",
+      "status: suspiciously wholesome"
     ];
 
     let noIndex = 0;
     let lastNoDodge = 0;
+    let badgeIndex = 0;
+    const defaultHint = hint.textContent;
 
     function dodgeNoButton(event) {
       noIndex = (noIndex + 1) % noTexts.length;
@@ -286,17 +350,25 @@
       const margin = 14;
       const width = no.offsetWidth || 130;
       const height = no.offsetHeight || 54;
+
       const minX = margin;
       const minY = margin;
       const maxX = Math.max(minX, window.innerWidth - width - margin);
       const maxY = Math.max(minY, window.innerHeight - height - margin);
+
       const pointerX = event?.clientX ?? window.innerWidth / 2;
       const pointerY = event?.clientY ?? window.innerHeight / 2;
-      let bestSpot = { x: minX, y: minY, distance: -1 };
+
+      let bestSpot = {
+        x: minX,
+        y: minY,
+        distance: -1
+      };
 
       for (let i = 0; i < 8; i++) {
         const x = minX + Math.random() * (maxX - minX);
         const y = minY + Math.random() * (maxY - minY);
+
         const centerX = x + width / 2;
         const centerY = y + height / 2;
         const distance = Math.hypot(centerX - pointerX, centerY - pointerY);
@@ -309,6 +381,7 @@
       no.style.position = "fixed";
       no.style.left = `${bestSpot.x}px`;
       no.style.top = `${bestSpot.y}px`;
+
       lastNoDodge = Date.now();
     }
 
@@ -332,14 +405,47 @@
       no.textContent = "hmm";
     });
 
-    yes.addEventListener("click", () => {
-      success.classList.remove("hidden");
-      yes.textContent = "Quête acceptée";
-      no.style.display = "none";
+    badge.addEventListener("click", () => {
+      badgeIndex = (badgeIndex + 1) % badgeTexts.length;
+      badge.textContent = badgeTexts[badgeIndex];
 
-      for (let i = 0; i < 28; i++) {
+      for (let i = 0; i < 10; i++) {
         createPiece();
       }
+    });
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const label = checkbox.closest("label");
+        label.classList.toggle("is-checked", checkbox.checked);
+
+        if (!checkbox.checked) {
+          hint.textContent = defaultHint;
+          return;
+        }
+
+        const effect = label.dataset.effect;
+
+        if (effect === "guitar") {
+          createMusicBurst();
+        }
+
+        if (effect === "italy") {
+          createItalyBurst();
+        }
+
+        if (effect === "redbull") {
+          shakeCard();
+        }
+
+        if (checkboxes.every((item) => item.checked)) {
+          hint.textContent = "achievement unlocked: planning too much";
+
+          for (let i = 0; i < 26; i++) {
+            createPiece();
+          }
+        }
+      });
     });
 
     starsOption.addEventListener("change", () => {
@@ -352,6 +458,17 @@
       }
     });
 
+    yes.addEventListener("click", () => {
+      success.classList.remove("hidden");
+      secret.classList.remove("hidden");
+      yes.textContent = "Sidequests unlocked";
+      no.style.display = "none";
+
+      for (let i = 0; i < 28; i++) {
+        createPiece();
+      }
+    });
+
     function createPiece() {
       const piece = document.createElement("div");
       const symbols = ["*", "+", "•", "✦", "·"];
@@ -361,12 +478,58 @@
       piece.style.left = Math.random() * 100 + "vw";
       piece.style.top = "-5vh";
       piece.style.animationDelay = Math.random() * 0.7 + "s";
+      piece.style.animationDuration = 2 + Math.random() * 1 + "s";
 
       confetti.appendChild(piece);
 
       setTimeout(() => {
         piece.remove();
-      }, 3000);
+      }, 3200);
+    }
+
+    function createMusicBurst() {
+      for (let i = 0; i < 18; i++) {
+        const piece = document.createElement("div");
+        const symbols = ["♪", "♫", "♩", "*"];
+
+        piece.className = "piece music-piece";
+        piece.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.top = "-5vh";
+        piece.style.fontSize = 16 + Math.random() * 14 + "px";
+        piece.style.animationDelay = Math.random() * 0.7 + "s";
+        piece.style.animationDuration = 2 + Math.random() * 1 + "s";
+
+        confetti.appendChild(piece);
+
+        setTimeout(() => {
+          piece.remove();
+        }, 3200);
+      }
+    }
+
+    function createItalyBurst() {
+      for (let i = 0; i < 24; i++) {
+        const piece = document.createElement("div");
+        const colorClass =
+          i % 3 === 0 ? "italy-green" :
+          i % 3 === 1 ? "" :
+          "italy-red";
+
+        piece.className = `piece ${colorClass}`;
+        piece.textContent = "■";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.top = "-5vh";
+        piece.style.fontSize = 10 + Math.random() * 10 + "px";
+        piece.style.animationDelay = Math.random() * 0.6 + "s";
+        piece.style.animationDuration = 1.9 + Math.random() * 1 + "s";
+
+        confetti.appendChild(piece);
+
+        setTimeout(() => {
+          piece.remove();
+        }, 3100);
+      }
     }
 
     function createStarPiece() {
@@ -386,6 +549,12 @@
       setTimeout(() => {
         piece.remove();
       }, 3400);
+    }
+
+    function shakeCard() {
+      card.classList.remove("is-shaking");
+      void card.offsetWidth;
+      card.classList.add("is-shaking");
     }
   </script>
 </body>
