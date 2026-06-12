@@ -69,6 +69,13 @@
       color: #374151;
     }
 
+    .hint {
+      margin: -8px 0 16px;
+      font-size: 0.86rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
     .list {
       display: flex;
       flex-direction: column;
@@ -170,6 +177,15 @@
       animation: fall 2.5s linear forwards;
     }
 
+    .star-piece {
+      color: #f59f00;
+      text-shadow: 0 0 8px rgba(245, 159, 0, 0.5);
+    }
+
+    #no.is-growing {
+      transform: scale(1.35);
+    }
+
     @keyframes fall {
       from {
         transform: translateY(-10vh) rotate(0deg);
@@ -213,14 +229,14 @@
     <h1>Riri <span class="small">(phiphi)</span> et Loulou</h1>
 
     <p class="subtitle">
-      Rita, would you like to go through the list with me?
+      Rita, est-ce que tu veux compléter la liste avec moi ?
     </p>
 
     <div class="list">
       <label><input type="checkbox" /> Aller à Emmaüs</label>
       <label><input type="checkbox" /> Forêt / campagne</label>
       <label><input type="checkbox" /> Mariage arrangé <span class="muted">(???)</span></label>
-      <label><input type="checkbox" /> Regarder les étoiles <span class="muted">(!!!)</span></label>
+      <label data-effect="stars"><input type="checkbox" /> Regarder les étoiles <span class="muted">(!!!)</span></label>
       <label><input type="checkbox" /> Apprendre le skate</label>
       <label><input type="checkbox" /> Apprendre la guitare</label>
       <label><input type="checkbox" /> Buttes-Chaumont à Paris <span class="muted">(oups)</span></label>
@@ -230,12 +246,14 @@
     </div>
 
     <div class="buttons">
-      <button id="yes">Oui, on lance la quête</button>
+      <button id="yes">Oui</button>
       <button id="no">Non</button>
     </div>
 
+    <p class="hint">Essaie Non quand même, juste pour voir.</p>
+
     <div id="success" class="success hidden">
-      Très bon choix. La liste est maintenant officiellement en cours d’exécution.
+      Parfait. La quête est acceptée : première étape, trouver une date.
     </div>
   </main>
 
@@ -244,6 +262,7 @@
     const no = document.getElementById("no");
     const success = document.getElementById("success");
     const confetti = document.getElementById("confetti");
+    const starsOption = document.querySelector('[data-effect="stars"] input');
 
     const noTexts = [
       "Non",
@@ -251,7 +270,16 @@
       "Réfléchis",
       "Mauvais bouton",
       "Erreur 404",
-      "Presque"
+      "Presque",
+      "Raté",
+      "Même pas",
+      "Trop tard",
+      "Pas celui-là",
+      "Tu abuses",
+      "Dernière chance",
+      "Non mais oui",
+      "Courage",
+      "Reviens ici"
     ];
 
     let noIndex = 0;
@@ -259,6 +287,7 @@
     no.addEventListener("mouseenter", () => {
       noIndex = (noIndex + 1) % noTexts.length;
       no.textContent = noTexts[noIndex];
+      no.classList.toggle("is-growing", Math.random() > 0.68);
 
       if (window.innerWidth <= 430) {
         return;
@@ -286,6 +315,16 @@
       }
     });
 
+    starsOption.addEventListener("change", () => {
+      if (!starsOption.checked) {
+        return;
+      }
+
+      for (let i = 0; i < 22; i++) {
+        createStarPiece();
+      }
+    });
+
     function createPiece() {
       const piece = document.createElement("div");
       const symbols = ["*", "+", "•", "✦", "·"];
@@ -301,6 +340,25 @@
       setTimeout(() => {
         piece.remove();
       }, 3000);
+    }
+
+    function createStarPiece() {
+      const piece = document.createElement("div");
+      const symbols = ["*", "✦", "·"];
+
+      piece.className = "piece star-piece";
+      piece.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      piece.style.left = Math.random() * 100 + "vw";
+      piece.style.top = "-5vh";
+      piece.style.fontSize = 16 + Math.random() * 16 + "px";
+      piece.style.animationDelay = Math.random() * 0.8 + "s";
+      piece.style.animationDuration = 2.1 + Math.random() * 1.1 + "s";
+
+      confetti.appendChild(piece);
+
+      setTimeout(() => {
+        piece.remove();
+      }, 3400);
     }
   </script>
 </body>
