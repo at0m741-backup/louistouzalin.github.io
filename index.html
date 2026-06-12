@@ -213,9 +213,6 @@
         height: 116px;
       }
 
-      #no {
-        position: static;
-      }
     }
   </style>
 </head>
@@ -279,25 +276,59 @@
     ];
 
     let noIndex = 0;
+    let lastNoDodge = 0;
 
-    no.addEventListener("mouseenter", () => {
+    function dodgeNoButton(event) {
       noIndex = (noIndex + 1) % noTexts.length;
       no.textContent = noTexts[noIndex];
       no.classList.toggle("is-growing", Math.random() > 0.68);
 
-      if (window.innerWidth <= 430) {
+      const margin = 14;
+      const width = no.offsetWidth || 130;
+      const height = no.offsetHeight || 54;
+      const minX = margin;
+      const minY = margin;
+      const maxX = Math.max(minX, window.innerWidth - width - margin);
+      const maxY = Math.max(minY, window.innerHeight - height - margin);
+      const pointerX = event?.clientX ?? window.innerWidth / 2;
+      const pointerY = event?.clientY ?? window.innerHeight / 2;
+      let bestSpot = { x: minX, y: minY, distance: -1 };
+
+      for (let i = 0; i < 8; i++) {
+        const x = minX + Math.random() * (maxX - minX);
+        const y = minY + Math.random() * (maxY - minY);
+        const centerX = x + width / 2;
+        const centerY = y + height / 2;
+        const distance = Math.hypot(centerX - pointerX, centerY - pointerY);
+
+        if (distance > bestSpot.distance) {
+          bestSpot = { x, y, distance };
+        }
+      }
+
+      no.style.position = "fixed";
+      no.style.left = `${bestSpot.x}px`;
+      no.style.top = `${bestSpot.y}px`;
+      lastNoDodge = Date.now();
+    }
+
+    no.addEventListener("pointerenter", dodgeNoButton);
+
+    no.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse") {
         return;
       }
 
-      const x = Math.random() * (window.innerWidth - 130);
-      const y = Math.random() * (window.innerHeight - 70);
-
-      no.style.position = "fixed";
-      no.style.left = `${x}px`;
-      no.style.top = `${y}px`;
+      event.preventDefault();
+      dodgeNoButton(event);
     });
 
-    no.addEventListener("click", () => {
+    no.addEventListener("click", (event) => {
+      if (Date.now() - lastNoDodge < 500) {
+        event.preventDefault();
+        return;
+      }
+
       no.textContent = "hmm";
     });
 
